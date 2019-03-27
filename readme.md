@@ -119,12 +119,7 @@
 
 #### 1.1 linear hypothesis   线性回归函数
 
-$$
-\begin{align*}
-h_\theta(x)&=\theta^Tx \\
-           &=\theta_0 + \theta_1x_1+\dots+\theta_nx_n
-\end{align*}
-$$
+<img src="https://latex.codecogs.com/gif.latex?\begin{align*}&space;h_\theta(x)&=\theta^Tx&space;\\&space;&=\theta_0&space;&plus;&space;\theta_1x_1&plus;\dots&plus;\theta_nx_n&space;\end{align*}" title="\begin{align*} h_\theta(x)&=\theta^Tx \\ &=\theta_0 + \theta_1x_1+\dots+\theta_nx_n \end{align*}" />
 
 ####1.2 cost function   代价函数
 
