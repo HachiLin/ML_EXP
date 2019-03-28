@@ -1,0 +1,316 @@
+\documentclass[UTF8]{article}
+\usepackage{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bbm}
+\author {林小斌}
+\title {Problem Set 3}
+\begin{document}
+\maketitle
+
+\section{Regularized Normal Equation for Linear Regression}
+\noindent Consider the cost function
+\begin{align*}
+  J(\theta)=\frac{1}{2m} \left[
+  \sum_{i=1}^m(h_\theta(x^{(i)}-y^{(i)})^2 + \lambda\sum_{j=1}^n\theta_j^2)
+  \right]
+\end{align*}
+The normal equation is to find the parameters that minimize the cost function by solving the following equations.
+\begin{equation*}
+  \frac{\partial}{\partial\theta_j}J(\theta) = 0
+\end{equation*}
+Assuming that there are m training examples, each instance has n characteristics, the training example set is
+\begin{equation*}
+  X = \left[
+  \begin{matrix}
+      x_0^{(1)} & \dots &x_n^{(1)} \\
+      \vdots & \ddots & \vdots \\
+      x_0^{(m)} & \dots & x_n^{(m)}
+  \end{matrix}
+\right]
+\end{equation*}
+where $x_j^{(i)}$ represents the j feature of the i instance.\\
+Consider
+\begin{equation*}
+  \theta = \left[
+  \begin{matrix}
+    \theta_0 & \theta_1 & \dots & \theta_n
+  \end{matrix}
+  \right]^T
+\end{equation*}
+\begin{equation*}
+  Y = \left[
+  \begin{matrix}
+  y^{(1)} & y^{(2)} & \dots & y^{(m)}
+  \end{matrix}
+  \right]^T
+\end{equation*}
+thus
+\begin{align*}
+  J(\theta) &= \frac{1}{2m} \left[
+   (X\theta - Y)^T(X\theta - Y) + \lambda\theta^2
+  \right] \\
+  &= \frac{1}{2m} \left[
+   Y^TY - Y^TX\theta - \theta^TX^TY + \theta^TX^TX\thtea^T\theta + \lambda L\theta^2
+  \right]
+\end{align*}
+where $L$ is $m \times m$ matrix and
+$
+  L = \left[
+  \begin{matrix}
+    0 &   &  & \\
+      & 1 &  & \\
+      &   & \ddots & \\
+      &   &  & 1 &
+  \end{matrix}
+  \right]
+$ \\ \\
+Derivation is equivalent to the following form
+\begin{equation*}
+  \frac{1}{2m}\left(
+  \frac{\partial Y^TY}{\partial \theta} - \frac{\partial Y^TX\theta}{\partial\theta} - \frac{\partial\theta^TX^TY}{\partial \theta} + \frac{\partial\theta^TX^TX\thtea^T\theta}{\partial\theta} + \lambda L\frac{\partial\theta^2}{\partial\theta}\right)
+\end{equation*}
+
+\paragraph{(1)For the first item}
+$$\frac{\partial Y^TY}{\partial\theta} = 0$$
+\paragraph{(2)For the second item}
+\begin{align*}
+  Y^TX\theta &=
+  \left[
+  \begin{matrix}
+  y^{(1)} & y^{(2)} & \dots & y^{(m)}
+  \end{matrix}
+  \right]
+  \left[
+  \begin{matrix}
+      x_0^{(1)} & \dots &x_n^{(1)} \\
+      \vdots & \ddots & \vdots \\
+      x_0^{(m)} & \dots & x_n^{(m)}
+  \end{matrix}
+ \right]
+  \left[
+  \begin{matrix}
+    \theta_0 & \theta_1 & \dots & \theta_n
+  \end{matrix}
+  \right]^T \\
+  &= \left(x_0^{(1)}y^{(1)} + \dots x_0^{(m)}y^{(m)} \right)\theta_0
+  + \dots + \left(x_n^{(1)}y^{(1)} + \dots x_n^{(m)}y^{(m)} \right)\theta_n
+\end{align*}
+thus
+$$
+  \frac{\partial Y^TX\theta}{\partial\theta} = \left[
+  \begin{matrix}
+    \frac{\partial Y^TX\theta}{\partial\theta_0} \\
+    \frac{\partial Y^TX\theta}{\partial\theta_1} \\
+    \vdots \\
+    \frac{\partial Y^TX\theta}{\partial\theta_n}
+  \end{matrix}
+  \right] = X^TY
+$$
+
+\paragraph{(3)For the third item}
+\begin{align*}
+  \theta^T X^TY &=
+  \left[
+  \begin{matrix}
+    \theta_0 & \theta_1 & \dots & \theta_n
+  \end{matrix}
+  \right]
+  \left[
+  \begin{matrix}
+      x_0^{(1)} & \dots &x_n^{(1)} \\
+      \vdots & \ddots & \vdots \\
+      x_0^{(m)} & \dots & x_n^{(m)}
+  \end{matrix}
+ \right]^T
+ \left[
+ \begin{matrix}
+ y^{(1)} & y^{(2)} & \dots & y^{(m)}
+ \end{matrix}
+ \right]^T \\
+  &= \left(x_0^{(1)}\theta_0 + \dots x_0^{(m)}\theta_n \right)y^{(1)}
+  + \dots + \left(x_n^{(1)}\theta_0 + \dots x_n^{(m)}\theta_n \right)y^{(n)}
+\end{align*}
+thus
+$$
+\frac{\partial \theta^T X^TY}{\partial\theta} = \left[
+\begin{matrix}
+  \frac{\partial \theta^T X^TY}{\partial\theta_0} \\
+  \frac{\partial \theta^T X^TY}{\partial\theta_1} \\
+  \vdots \\
+  \frac{\partial \theta^T X^TY}{\partial\theta_n}
+\end{matrix}
+\right] = X^TY
+$$
+
+\paragraph{(4)For the fourth item}
+$$
+\theta^TX^TX\theta = X^TX\left( \theta_0^2 + \theta_1^2 +\cdots + \theta_n^2 \right)
+$$
+thus
+$$
+\frac{\partial \theta^TX^TX\theta}{\partial\theta} = \left[
+\begin{matrix}
+  \frac{\partial \theta^TX^TX\theta}{\partial\theta_0} \\
+  \frac{\partial \theta^TX^TX\theta}{\partial\theta_1} \\
+  \vdots \\
+  \frac{\partial \theta^TX^TX\theta}{\partial\theta_n}
+\end{matrix}
+\right] = 2\left( X^TX\right)
+\left[
+  \begin{matrix}
+    \theta_0 \\
+    \theta_1 \\
+    \vdots \\
+    \theta_n
+  \end{matrix}}
+\right] = 2X^TX\theta
+$$
+
+\paragraph{(5)For the fifth item}
+$$\lambda L \frac{\partial \theta^2}{\theta} = 2\lambda L \theta$$
+
+\paragraph{In summary, the normal equation is:}
+$$\frac{1}{2m}\left(-2X^TY+2X^TX\theta+2\lambda L\theta \right) = 0$$
+thus
+$$\theta = \left(X^TX + \lambda L \right)^{-1}X^TY$$
+
+\section{Lagrange Duality}
+\noindent Primal problem formulation
+\begin{align*}
+  &min \quad c^Tx  \\
+  &s.t \quad Ax \preceq b
+\end{align*}
+where $x \in $\mathbb{R} is variable, $c \in$ \mathbb{R}^n, $A \in$ \mathbb{R}^{k \times n}, $b \in $ \mathbb{R}. \\
+The Lagrangian
+$$
+\mathcal{L}(x,\alpha) = c^Tx + \alpha^T(Ax - b)
+$$
+The Lagrange dual function
+\begin{align*}
+\mathcal{G}(\alpha) &= \inf_x \ \mathcal{L}(x,\alpha) \\
+&=\inf_x \ (c^Tx + \alpha^T(Ax - b)) \\
+& = \inf_x \ ((c^T+\alpha^TA)x-\alpha^Tb)
+\end{align*}
+To avoid the Lagrange dual function $\mathcal{G}$ be -\infty,\ $c^T + \alpha^TA$ must equal to 0. \\
+Lagrange dual problem
+\begin{align*}
+  &\max_\alpha \ G(\alpha) = \max_\alpha \ \inf_x\ \mathcal{L}(x,\alpha) = \max_\alpha \  -\alpha^Tb \\
+  &s.t \quad c^T + \alpha^TA = 0 \\
+  &\quad \quad \alpha \geq 0
+\end{align*}
+
+
+\section{SVM}
+\subsection{Convex Functions}
+\noindent Assume
+$$
+ w = \left[\begin{matrix}
+ x_1 x_2 \dots x_n
+ \end{matrix}\right]^T
+$$
+then we have
+\begin{equation*}
+  f(w) =  w^Tw
+       =  \left[\begin{matrix}
+       x_1 x_2 \dots x_n
+       \end{matrix}\right]^T
+       \left[
+         \begin{matrix}
+           x_1 \\
+           x_2 \\
+           \vdots \\
+           x_n
+         \end{matrix}}
+       \right]
+       =x_1^2 + x_2^2 + \dots + x_n^2
+       =f(x_1) + f(x_2) + \dots + f(x_n)
+\end{equation*}
+where $f(x_i) = x_i^2,\quad i = 1,2,\dots,n$.\\
+Since $f(x) = x^2$ is a convex function, for any convex function,
+$$
+f(\lambda x_1+(1-\lambda)x_2) \leq \lambda f(x_1)+(1-\lambda)f(x_2)
+$$
+For any $i,j \in \{1,2,\dots,n \}$, we assume $g(x) = f_i(x)+f_j(x)$, then we have
+\begin{align*}
+  g(\lambda x_i+(1-\lambda)x_j) &= f_i(\lambda x_i+(1-\lambda)x_j)+f_j(\lambda x_i+(1-\lambda)x_j) \\
+   & \leq \lambda f_i(x_i)+(1-\lambda)f_i(x_j) +
+   f_j(x_i)+(1-\lambda)f_j(x_j) \\
+   &=\lambda(f_i(x_i)+f_j(x_i))+(1-\lambda)(f_i(x_j)+f_j(x_j)) \\
+   &=\lambda g(x_i) +(1-\lambda)g(x_j)
+\end{align*}
+Then we know $g(x)$ is a convex function too! Finally we can change $f(w)$ into $g(x)$, so $f(w)$ is convex function.
+
+
+\subsection{Soft-Margin for Separable Data}
+\noindent True! \\
+According to the question, we can set the condition that
+$$
+y^{(i)}(\omega^Tx^{(i)}+b) \geq 1
+$$
+Lagrangian of soft-margin:
+$$
+L(\omega,b,\xi,\alpha,r) = \frac{1}{2}\omega^T\omega + C\sum_{i=1}^m\xi_i - \sum_{i=1}^m\alpha_i[y^{(i)}(\omega^Tx^{(i)}+b)-1+\xi_i] - \sum_{i=1}^m r_i \xi_i
+$$
+KKT conditions:\\
+1.\ $\bigtriangledown_{\omega}(\omega,b,\xi,\alpha,r) = 0 \Rightarrow \omega = \sum_{i=1}^m\alpha_i y^{(i)}x^{(i)}$ \\
+2.\ $\bigtriangledown_b(\omega,b,\xi,\alpha,r) = 0 \Rightarrow \sum_{i=1}^m \alpha_iy^{(i)}=0$ \\
+3.\ $\bigtriangledown_\xi_i(\omega,b,\xi,\alpha,r) = 0 \Rightarrow \alpha_i + r_i = C \ \text{for} \ \forall i$ \\
+4.\ $\alpha_i,r_i,\xi_i \geq 0, \ \text{for} \ \forall i$\\
+5.\ $y^{(i)}(\omega^Tx^{(i)}+b)-1+\xi_i=0,\ \text{for} \ \forall i$ \\
+6.\ $r_i\xi_i=0, \ \text{for} \ \forall i$ \\
+If $\alpha_i = 0, y^{(i)}(\omega^Tx^{(i)}+b) \geq 1$\
+\begin{align*}
+  &\alpha_i = 0,\ \alpha_i + r_i = C \\
+  &r_i = C \\
+  &r_i\xi_i = 0,\ \xi_i \geq 0 \\
+  &\xi_i = 0\\
+  &\alpha_i(y^{(i)}(\omega^Tx^{(i)}+b)-1+\xi_i) \geq 0\\
+  & y^{(i)}(\omega^Tx^{(i)}+b)-1+\xi_i = 0\\
+  &y^{(i)}(\omega^Tx^{(i)}+b) \geq 1
+\end{align*}
+If $\alpha \neq C$, it satisfies the condition $ y^{(i)}(\omega^Tx^{(i)}+b) \geq 1$, then we have $\xi_i = 0$.
+When we use soft-margin SVM can solve this problem when dataset are linearly separable, it is not necessary to use a hard-margin SVM.
+
+
+\subsection{In-bound Support Vectors in Soft-Margin SVMs}
+\noindent Lagrangian of soft-margin:
+$$
+L(\omega,b,\xi,\alpha,r) = \frac{1}{2}\omega^T\omega + C\sum_{i=1}^m\xi_i - \sum_{i=1}^m\alpha_i[y^{(i)}(\omega^Tx^{(i)}+b)-1+\xi_i] - \sum_{i=1}^m r_i \xi_i
+$$
+KKT conditions:\\
+1.\ $\bigtriangledown_{\omega}(\omega,b,\xi,\alpha,r) = 0 \Rightarrow \omega = \sum_{i=1}^m\alpha_i y^{(i)}x^{(i)}$ \\
+2.\ $\bigtriangledown_b(\omega,b,\xi,\alpha,r) = 0 \Rightarrow \sum_{i=1}^m \alpha_iy^{(i)}=0$ \\
+3.\ $\bigtriangledown_\xi_i(\omega,b,\xi,\alpha,r) = 0 \Rightarrow \alpha_i + r_i = C \ \text{for} \ \forall i$ \\
+4.\ $\alpha_i,r_i,\xi_i \geq 0, \ \text{for} \ \forall i$\\
+5.\ $y^{(i)}(\omega^Tx^{(i)}+b)-1+\xi_i=0,\ \text{for} \ \forall i$ \\
+6.\ $r_i\xi_i=0, \ \text{for} \ \forall i$
+\paragraph{As for in-bound SVs}
+$0 < \alpha_i < C$
+\begin{align*}
+  &0 < \alpha_i < C,\ \alpha_i + r_i = C \\
+  &0 < r_i < C \\
+  &r_i\xi_i = 0,\ \xi_i \geq 0 \\
+  &\xi_i = 0\\
+  &\alpha_i(y^{(i)}(\omega^Tx^{(i)}+b)-1+\xi_i) = 0\\
+  & y^{(i)}(\omega^Tx^{(i)}+b)-1+\xi_i = 0\\
+  &y^{(i)}(\omega^Tx^{(i)}+b) = 1
+\end{align*}
+So the in-bound  SVs lie exactly on the margin.
+\paragraph{As for bound SVs}
+$\alpha_i = C$
+\begin{align*}
+  &\alpha_i = C,\ \alpha_i + r_i = C \\
+  &r_i = 0 \\
+  &r_i\xi_i = 0,\ \xi_i \geq 0 \\
+  &\xi_i \geq 0\\
+  &\alpha_i(y^{(i)}(\omega^Tx^{(i)}+b)-1+\xi_i) = 0\\
+  & y^{(i)}(\omega^Tx^{(i)}+b)-1+\xi_i = 0\\
+  &y^{(i)}(\omega^Tx^{(i)}+b) = 1 - \xi \leq 1
+\end{align*}
+So the bounds SVs can lie both on or in the margin.
+
+
+
+
+\end{document}
